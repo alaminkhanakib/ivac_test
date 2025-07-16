@@ -6,6 +6,8 @@
 // @author       You
 // @match        https://www.ivacbd.com/*
 // @grant        GM_addStyle
+// @updateURL    https://raw.githubusercontent.com/alaminkhanakib/ivac_test/main/simple-page-loader.user.js
+// @downloadURL  https://raw.githubusercontent.com/alaminkhanakib/ivac_test/main/simple-page-loader.user.js
 // @run-at       document-end
 // ==/UserScript==
 
@@ -13,7 +15,6 @@
     'use strict';
 
     // --- 1. Define the appearance of the control panel ---
-    // This uses GM_addStyle to add CSS to the page safely.
     GM_addStyle(`
         #simple-loader-panel {
             position: fixed;
@@ -60,7 +61,6 @@
     `);
 
     // --- 2. Create the HTML for the control panel ---
-    // A simple div that will contain our input field and button.
     const panelContainer = document.createElement('div');
     panelContainer.id = 'simple-loader-panel';
     panelContainer.innerHTML = `
@@ -68,37 +68,25 @@
         <input type="number" id="loader-input" placeholder="Number of tabs" value="5">
         <button id="loader-button">Load Pages</button>
     `;
-
-    // Add the panel to the page's body once the page has loaded.
     document.body.appendChild(panelContainer);
 
     // --- 3. Define the function that performs the action ---
     function openPagesInNewTabs() {
-        // Find the input field in the document
         const numTabsInput = document.getElementById('loader-input');
-        // Get the number from the input, or default to 5 if it's empty/invalid
         const numberOfTabs = parseInt(numTabsInput.value, 10) || 5;
-        // **IMPORTANT**: Set the URL you want to open here
         const targetUrl = 'https://www.ivacbd.com/';
-
         console.log(`Attempting to open ${numberOfTabs} tabs for the URL: ${targetUrl}`);
 
-        // Loop to open the specified number of tabs
         for (let i = 0; i < numberOfTabs; i++) {
-            // window.open() opens a new tab. It returns null if a popup blocker stops it.
             const newTab = window.open(targetUrl, '_blank');
-
-            // Check if the tab was blocked by a popup blocker
             if (!newTab) {
                 alert('Popup blocked! Please allow popups for this site and then click the button again.');
-                // Stop the loop if popups are blocked
                 break;
             }
         }
     }
 
     // --- 4. Attach the function to the button's click event ---
-    // Get the button from the document and tell it to run our function when clicked.
     const loadButton = document.getElementById('loader-button');
     loadButton.addEventListener('click', openPagesInNewTabs);
 
